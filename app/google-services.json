@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "459703198309",
+    "firebase_url": "https://kassenbelegv1.firebaseio.com",
+    "project_id": "kassenbelegv1",
+    "storage_bucket": "kassenbelegv1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459703198309:android:92a83c4c5c5db0a368dc8c",
+        "android_client_info": {
+          "package_name": "com.example.kamerapreview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459703198309-p2kq2jpkh0k8rf2o2ealpqtsgf004h3k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcnMjzsFvmzdhpoFvFxk8VT1Ng0s6GzKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459703198309-p2kq2jpkh0k8rf2o2ealpqtsgf004h3k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
