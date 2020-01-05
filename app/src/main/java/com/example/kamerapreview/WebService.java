@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class WebService {
     final static String url = "192.168.178.64";
@@ -46,9 +47,9 @@ public class WebService {
         }
     }
 
-    public void getImageRequest(ImageListener imageListener){
+    public void getImageRequest(ImageListener imageListener, String uuid){
         AsyncTask<String, Void, String> task = getImageTask(imageListener);
-        task.execute("http://" + url + ":8080/bilscan/rest/rechnungen/foto");
+        task.execute("http://" + url + ":8080/bilscan/rest/rechnungen/foto?uuid="+uuid);
     }
 
     public void getAllKassenbelegeRequest(KassenbelegListener kassenbelegListener){
@@ -56,7 +57,43 @@ public class WebService {
         task.execute("http://" + url + ":8080/bilscan/rest/rechnungen/getAll");
     }
 
+    public void deleteKassenbelegRequest(String uuid){
+        AsyncTask<String, Void, String> task = deleteKassenbelegTask(uuid);
+        task.execute("http://" + url + ":8080/bilscan/rest/rechnungen/clear?uuid="+uuid);
+    }
 
+
+    private AsyncTask<String, Void, String> deleteKassenbelegTask(String uuid){
+        return new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                try {
+                    final URL url = new URL(params[0]);
+                    final HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("DELETE");
+                    //con.setRequestProperty("Accept", "image/png");
+
+
+                    final String theString = IOUtils.toString(con.getInputStream(), StandardCharsets.UTF_8.name());
+
+                    return "erfolgreich";
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                return"";
+
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
+            }
+        };
+    }
 
     private AsyncTask<String, Void, String> saveTask(){
         return new AsyncTask<String, Void, String>() {

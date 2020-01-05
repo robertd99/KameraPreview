@@ -61,20 +61,15 @@ public class Analyzer extends AppCompatActivity {
 
 
         sendButton = findViewById(R.id.beleg_senden);
-        /*sendButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-               kassenbelegModel.setBeschreibung(editBeschreibung.getText().toString()) ;
-                Toast.makeText(getBaseContext(), "Beschreibung: "+kassenbelegModel.getBeschreibung()+" Summe: "+kassenbelegModel.getSumme()+" €", Toast.LENGTH_LONG).show();
 
-            }
-        });*/
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 kassenbelegModel.setBeschreibung(editBeschreibung.getText().toString());
                 String summe= new String(editSumme.getText().toString());
                 String summeDouble = summe.replaceAll("€","");
-                kassenbelegModel.setSumme(Double.parseDouble(summeDouble));
+                String summeDouble2 = summe.replaceAll(",",".");
+
+                kassenbelegModel.setSumme(Double.parseDouble(summeDouble2));
                 Bitmap myBitmapRotated = rotateBitmap(kassenbelegModel.getBitmap(),90);
                 Bitmap myBitmapCropped= cropBitmap(myBitmapRotated);
                 kassenbelegModel.setBitmap(myBitmapCropped);
@@ -99,8 +94,7 @@ public class Analyzer extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
                                 @Override
                                 public void onSuccess(FirebaseVisionText firebaseVisionText) throws IllegalArgumentException {
-                                    // Task completed successfully
-                                    // ...
+
 
 
                                     String getLine = new String();
@@ -169,7 +163,6 @@ public class Analyzer extends AppCompatActivity {
             Toast.makeText(getBaseContext(), "Error: Please try again!", Toast.LENGTH_LONG).show();
         }
         else {
-            //Bitmap myBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
             Bitmap rotatedBitmap = rotateBitmap(kassenbelegModel.getBitmap(), 90);
             Bitmap croppedBitmap = cropBitmap(rotatedBitmap);
             imageView.setImageBitmap(croppedBitmap);
@@ -191,22 +184,7 @@ public class Analyzer extends AppCompatActivity {
     }
 
     private void analyzeString(String values)throws IllegalArgumentException{
-        /*String valuesOhneSpaces = values.replaceAll(" ", "");
-        String valuesOhneSonderzeichen = valuesOhneSpaces.replaceAll("[^a-zA-Z0-9,.]", "");
-        String erg = valuesOhneSonderzeichen;
-        //textView.setText(erg);
 
-
-        Pattern endpreisfilter = Pattern.compile("(?i)[(summe|zuzahlen|zuzahleneuro).*]+\\d{1,2}[,|\\.]{0,1}\\d\\d"); // B*S(\w*)+[.{0,4}]* reg ex B -beliebig viele character bis , dann 2 mal 0-9
-
-        //Pattern endpreisfilter = Pattern.compile("\\d{1,2}[,|\\.]{1}\\d{1,2}+(?i)[(summe|zuzahlen|zuzahleneuro).*]+"); // B*S(\w*)+[.{0,4}]* reg ex B -beliebig viele character bis , dann 2 mal 0-9
-        Matcher matcher = endpreisfilter.matcher(valuesOhneSonderzeichen);
-        String endsummenzeile = new String();
-        while (matcher.find()) {
-            endsummenzeile += matcher.group();
-        }
-        String ergzahlenohnegrossbuchstaben = endsummenzeile.replaceAll("[A-Z]", ""); //entfern alle großbuchstaben? unsicher
-        String ergzahlenohnebuchstaben = ergzahlenohnegrossbuchstaben.replaceAll("[a-z]", "");*/
         if(values.isEmpty()){
             throw new IllegalArgumentException();
         }

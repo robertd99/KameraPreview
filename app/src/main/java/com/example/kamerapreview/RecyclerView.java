@@ -1,93 +1,102 @@
 package com.example.kamerapreview;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.kamerapreview.Adapter.RecyclerViewAdapter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class RecyclerView extends AppCompatActivity {
 
-    Button getImage;
-    ImageView imageView;
-    TextView textView;
-    TextView textJson;
-    Button getJson;
+    private androidx.recyclerview.widget.RecyclerView recyclerView;
+    private RecyclerViewAdapter recyclerViewAdapter;
+    List<KassenbelegModel> kassenbelege;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
 
-
-        textJson = findViewById(R.id.textJson);
-        imageView = findViewById(R.id.imageView);
-        textView = findViewById(R.id.textView);
-        textView.setText("Das hier ist ein test");
-
-        getJson = findViewById(R.id.getJson);
-        getJson.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Toast.makeText(getBaseContext(), "clicktest", Toast.LENGTH_LONG).show();
-
-                WebService webService = new WebService();
-                webService.getAllKassenbelegeRequest(new KassenbelegListener() {
-                    @Override
-                    public void setKassenbelege(final String string) {
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                textJson.setText(string);
-
-                                // Stuff that updates the UI
-
-                            }
-                        });
-                    }
-                });
-
-            }
-        });
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
 
 
-        getImage = findViewById(R.id.getimage);
-        getImage.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Toast.makeText(getBaseContext(), "clicktest", Toast.LENGTH_LONG).show();
-
-                WebService webService = new WebService();
-                webService.getImageRequest(new ImageListener() {
-                    @Override
-                    public void setImage(final byte[] imageBytes) {
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                textView.setText("Das hier ist ein test22222");
-
-                                Bitmap  bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-
-                                imageView.setImageBitmap(bitmap);
-
-                                // Stuff that updates the UI
-
-                            }
-                        });
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(RecyclerView.this,KassenbelegImage.class);
+                        intent.putExtra("kassenbeleg",recyclerViewAdapter.getKassenbelegModel(position));
+                        startActivity(intent);
 
                     }
-                });
 
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+
+
+        WebService webService = new WebService();
+        webService.getAllKassenbelegeRequest(new KassenbelegListener() {
+            @Override
+            public void setKassenbelege(final String string) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                   kassenbelege = new ArrayList(Arrays.asList(objectMapper.readValue(string, KassenbelegModel[].class)));
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            //HIER DIE RECYCLER VIEW ERSTELLEN!!!!!!
+
+                            recyclerViewAdapter = new RecyclerViewAdapter(RecyclerView.this, kassenbelege);
+
+                            recyclerView.setAdapter(recyclerViewAdapter);
+                        }
+                    });
+
+                }
+                catch(IOException e){
+                    e.printStackTrace();
+                }
             }
         });
     }
 
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull androidx.recyclerview.widget.RecyclerView recyclerView, @NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder viewHolder, @NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder target) {
+            return false;
+        }
 
+        @Override
+        public void onSwiped(@NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            recyclerViewAdapter.notifyItemRemoved(position);
+            WebService webService = new WebService();
+            webService.deleteKassenbelegRequest(kassenbelege.get(position).getBelegID());
+            kassenbelege.remove(position);
+            Toast.makeText(RecyclerView.this, "Kassenbeleg gelöscht!", Toast.LENGTH_SHORT).show();
+        }
+    };
 }

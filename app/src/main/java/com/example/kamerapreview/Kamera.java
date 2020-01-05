@@ -49,7 +49,7 @@ public class Kamera extends AppCompatActivity {
         textureView = findViewById(R.id.view_finder);
 
         if(allPermissionsGranted()){
-            startCamera(); //start camera if permission has been granted by user
+            startCamera(); //started die kamera wenn permission granted
         } else{
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         }
@@ -65,7 +65,7 @@ public class Kamera extends AppCompatActivity {
         CameraX.unbindAll();
 
         Rational aspectRatio = new Rational (textureView.getWidth(), textureView.getHeight());
-        Size screen = new Size(textureView.getWidth(), textureView.getHeight()); //size of the screen
+        Size screen = new Size(textureView.getWidth(), textureView.getHeight()); //screengroesse
 
 
         PreviewConfig pConfig = new PreviewConfig.Builder().setTargetAspectRatio(aspectRatio).setTargetResolution(screen).build();
@@ -97,7 +97,6 @@ public class Kamera extends AppCompatActivity {
                 imgCap.takePicture(file, new ImageCapture.OnImageSavedListener() {
                     @Override
                     public void onImageSaved(@NonNull File file) {
-                        //String msg = "Pic captured at " + file.getAbsolutePath();
                         String msg = "Beleg erfasst";
                         Toast.makeText(getBaseContext(), msg,Toast.LENGTH_LONG).show();
                         kassenbelegModel.setImageFile(file);
@@ -113,11 +112,6 @@ public class Kamera extends AppCompatActivity {
                         String inActiveDate = null;
                         inActiveDate = format1.format(date);
                         kassenbelegModel.setZeit(inActiveDate);
-
-
-
-                        //Long myuuid = Calendar.getInstance().getTime().getDay()*100000000+Calendar.getInstance().getTime().getMonth()*1000000+Calendar.getInstance().getTime().getYear()*10000+System.currentTimeMillis();
-                        //kassenbelegModel.setBelegID(myuuid.toString());
                         file.deleteOnExit();
                         send();
                     }
@@ -133,18 +127,10 @@ public class Kamera extends AppCompatActivity {
                 });
             }
         });
-
-        //bind to lifecycle:
         CameraX.bindToLifecycle((LifecycleOwner)this, preview, imgCap);
     }
 
-    /*private void fileToImageView() {
-        if (imageFile.exists()) {
-            Bitmap myBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-            imageView.setImageBitmap(myBitmap);
-            imageFile.delete();
-        }
-    }*/
+
 
     private void updateTransform(){
         Matrix mx = new Matrix();

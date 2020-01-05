@@ -44,7 +44,14 @@ dependencies {
     //apache common io
     implementation 'commons-io:commons-io:2.6'
 
+    //jackson json
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 
-
+    //Cardview
+    implementation 'androidx.cardview:cardview:1.0.0'
+    //recyclerView
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }
 apply plugin: 'com.google.gms.google-services'
