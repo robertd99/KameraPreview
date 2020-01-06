@@ -25,7 +25,7 @@ public class RecyclerView extends AppCompatActivity {
 
     private androidx.recyclerview.widget.RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
-    List<KassenbelegModel> kassenbelege;
+    List<KassenbelegModel> kassenbelege = new ArrayList<KassenbelegModel>();
 
 
     @Override
@@ -33,11 +33,37 @@ public class RecyclerView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
 
+
+
+        KassenbelegModel kassenbelegModel1 = new KassenbelegModel();
+        kassenbelegModel1.setSumme(10.0);
+        kassenbelegModel1.setBeschreibung("10.0");
+        kassenbelegModel1.setZeit("10/10/10");
+
+        KassenbelegModel kassenbelegModel2 = new KassenbelegModel();
+        kassenbelegModel2.setSumme(20.0);
+        kassenbelegModel2.setBeschreibung("20.0");
+        kassenbelegModel2.setZeit("20/20/20");
+
+        kassenbelege.add(kassenbelegModel1);
+        kassenbelege.add(kassenbelegModel2);
+
+
+
+
+
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
 
+///rausnehmen
+
+        recyclerViewAdapter = new RecyclerViewAdapter(RecyclerView.this, kassenbelege);
+
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+///
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {

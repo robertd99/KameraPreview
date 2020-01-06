@@ -36,7 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         KassenbelegModel kassenbelegModel = kassenbelegModelList.get(position); // each kassenbeleg object inside of our list
         holder.beschreibung.setText(kassenbelegModel.getBeschreibung());
-        holder.summe.setText(kassenbelegModel.getSumme().toString());
+        holder.summe.setText(kassenbelegModel.getSumme().toString()+"€");
         holder.datum.setText(kassenbelegModel.getZeit());
     }
 

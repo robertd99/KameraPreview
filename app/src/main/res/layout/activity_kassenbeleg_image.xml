@@ -11,12 +11,34 @@
         android:layout_width="match_parent"
         android:layout_height="451dp" />
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/summe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="117dp"
-        android:text="Button" />
+        android:layout_marginStart="23dp"
+        android:layout_marginBottom="208dp"
+        android:text="Summe" />
+
+    <TextView
+        android:id="@+id/zeit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="169dp"
+        android:text="Zeit" />
+
+    <TextView
+        android:id="@+id/beschreibung"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="22dp"
+        android:layout_marginBottom="245dp"
+        android:text="Beschreibung" />
+
 </RelativeLayout>

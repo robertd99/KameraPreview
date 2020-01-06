@@ -6,11 +6,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class KassenbelegImage extends AppCompatActivity {
 
     private ImageView imageView;
     private KassenbelegModel kassenbelegModel;
+    TextView summe;
+    TextView beschreibung;
+    TextView zeit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +22,15 @@ public class KassenbelegImage extends AppCompatActivity {
         setContentView(R.layout.activity_kassenbeleg_image);
         kassenbelegModel = (KassenbelegModel)getIntent().getSerializableExtra("kassenbeleg");
 
+        summe = findViewById(R.id.summe);
+        beschreibung = findViewById(R.id.beschreibung);
+        zeit = findViewById(R.id.zeit);
         imageView = findViewById(R.id.image);
+
+        summe.setText(kassenbelegModel.getSumme()+"€");
+        beschreibung.setText(kassenbelegModel.getBeschreibung());
+        zeit.setText(kassenbelegModel.getZeit());
+
 
         WebService webService = new WebService();
         webService.getImageRequest(new ImageListener() {

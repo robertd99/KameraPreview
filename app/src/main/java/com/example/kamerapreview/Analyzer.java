@@ -3,6 +3,7 @@ package com.example.kamerapreview;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -67,17 +68,25 @@ public class Analyzer extends AppCompatActivity {
                 kassenbelegModel.setBeschreibung(editBeschreibung.getText().toString());
                 String summe= new String(editSumme.getText().toString());
                 String summeDouble = summe.replaceAll("€","");
-                String summeDouble2 = summe.replaceAll(",",".");
+                String summeDouble2 = summeDouble.replaceAll(",",".");
 
-                kassenbelegModel.setSumme(Double.parseDouble(summeDouble2));
-                Bitmap myBitmapRotated = rotateBitmap(kassenbelegModel.getBitmap(),90);
-                Bitmap myBitmapCropped= cropBitmap(myBitmapRotated);
-                kassenbelegModel.setBitmap(myBitmapCropped);
+                try {
+                    kassenbelegModel.setSumme(Double.parseDouble(summeDouble2));
+                    Bitmap myBitmapRotated = rotateBitmap(kassenbelegModel.getBitmap(),90);
+                    Bitmap myBitmapCropped= cropBitmap(myBitmapRotated);
+                    kassenbelegModel.setBitmap(myBitmapCropped);
 
-                WebService webService = new WebService();
-                webService.sendKassenbeleg(kassenbelegModel);
+                    WebService webService = new WebService();
+                    webService.sendKassenbeleg(kassenbelegModel);
 
-                Toast.makeText(getBaseContext(), "gesendet", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "gesendet", Toast.LENGTH_SHORT).show();
+                    openMain();
+
+                }
+                catch(IllegalArgumentException e){
+                    Toast.makeText(getBaseContext(),"keine gültige Summe",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -155,20 +164,16 @@ public class Analyzer extends AppCompatActivity {
                                     });
 
 
-        fileToImageView();
+        bitmapToImageView();
     }
 
-    private void fileToImageView() {
-        if ( imageFile.exists()==false) {
-            Toast.makeText(getBaseContext(), "Error: Please try again!", Toast.LENGTH_LONG).show();
-        }
-        else {
-            Bitmap rotatedBitmap = rotateBitmap(kassenbelegModel.getBitmap(), 90);
-            Bitmap croppedBitmap = cropBitmap(rotatedBitmap);
-            imageView.setImageBitmap(croppedBitmap);
+    private void bitmapToImageView() {
+        Bitmap rotatedBitmap = rotateBitmap(kassenbelegModel.getBitmap(), 90);
+        Bitmap croppedBitmap = cropBitmap(rotatedBitmap);
+        //imageView.setImageBitmap(croppedBitmap);
+        imageView.setImageBitmap(rotatedBitmap);
+        imageFile.delete();
 
-            imageFile.delete();
-        }
     }
 
     private static Bitmap rotateBitmap(Bitmap source, float angle){
@@ -184,7 +189,6 @@ public class Analyzer extends AppCompatActivity {
     }
 
     private void analyzeString(String values)throws IllegalArgumentException{
-
         if(values.isEmpty()){
             throw new IllegalArgumentException();
         }
@@ -198,10 +202,14 @@ public class Analyzer extends AppCompatActivity {
             e.printStackTrace();
             kassenbelegModel.setSumme(0.0);
             Toast.makeText(getBaseContext(), "String to double failed",Toast.LENGTH_LONG).show();
-
         }
 
 
+    }
+
+   private void openMain(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
     }
 
 

@@ -53,8 +53,13 @@ public class KassenbelegModel implements Serializable {
     }
 
     @JsonProperty("summe")
-    public void setSumme(Double summe){
-        this.summe=summe;
+    public void setSumme(Double summe)throws IllegalArgumentException{
+        if(summe*100%1==0 && summe>=0){
+            this.summe=summe;
+        }
+        else{
+            throw new IllegalArgumentException("Keine gültige Summe");
+        }
     }
 
     @JsonProperty("uuid")

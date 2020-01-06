@@ -20,7 +20,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class WebService {
-    final static String url = "192.168.178.64";
+    final static String url = "141.45.36.77";
 
 
     public void sendKassenbeleg(KassenbelegModel kassenbelegModel) {
@@ -141,7 +141,7 @@ public class WebService {
             @Override
             protected String doInBackground(String... params) {
                 try {
-                        final URL url = new URL(params[0]);
+                    final URL url = new URL(params[0]);
                     final HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("GET");
                     con.setRequestProperty("Accept", "image/png");
@@ -174,7 +174,7 @@ public class WebService {
             @Override
             protected String doInBackground(String... params) {
                 try {
-                    final URL url = new URL("http://192.168.178.64:8080/bilscan/rest/rechnungen/getAll");
+                    final URL url = new URL(params[0]);
                     final HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("GET");
                     con.setRequestProperty("Accept", "application/json");
