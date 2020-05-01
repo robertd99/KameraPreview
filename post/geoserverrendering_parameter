@@ -1,0 +1,7 @@
+servername: 127.0.0.1
+portnumber: 5432
+username: postgres
+pwd: cousi
+dbname: PostGIS
+schema: rendering
+
