@@ -1,7 +1,13 @@
 servername: 127.0.0.1
 portnumber: 5432
+<<<<<<< HEAD
 username: ohdm
 pwd: SoSe+2020
 dbname: postgis_db
+=======
+username: postgres
+pwd: cousi
+dbname: PostGIS
+>>>>>>> b565e0af64285937774ec0b136a68560e66d3d0a
 schema: rendering
 
